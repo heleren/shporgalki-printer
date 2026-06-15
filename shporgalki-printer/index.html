@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#1a73e8">
+    <meta name="theme-color" content="#064e3b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Шпаргалки">
@@ -16,6 +16,10 @@
 <body>
     <div class="app">
         <header class="header">
+            <div class="header__brand">
+                <div class="header__logo">Heleren</div>
+                <div class="header__badge">PDF Printer</div>
+            </div>
             <div class="header__title">Шпаргалки</div>
             <div class="header__subtitle">Упаковка билетов на A4</div>
         </header>
@@ -121,6 +125,17 @@
                                 <span class="checkbox-text">Метки для ножниц</span>
                             </label>
                         </div>
+                        <div class="setting-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="cropPages" checked>
+                                <span class="checkbox-text">Обрезать белые поля страниц</span>
+                            </label>
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-label" for="pageRange">Страницы для обработки</label>
+                            <input type="text" id="pageRange" class="setting-input" placeholder="например: 5-40 или 5,8,10-20">
+                            <div class="setting-hint">Оставь пустым, чтобы обработать все страницы</div>
+                        </div>
                     </div>
                 </details>
 
@@ -139,6 +154,15 @@
             <!-- Предпросмотр -->
             <section class="section preview-section" id="previewSection" hidden>
                 <h2 class="section-title">Предпросмотр</h2>
+                <div class="preview-toolbar">
+                    <span class="preview-toolbar__label">Масштаб:</span>
+                    <div class="preview-toolbar__zoom">
+                        <button id="zoomOut" title="Уменьшить">−</button>
+                        <span class="preview-toolbar__value" id="zoomValue">100%</span>
+                        <button id="zoomIn" title="Увеличить">+</button>
+                    </div>
+                    <button class="preview-toolbar__fit" id="zoomFit">Подогнать по ширине</button>
+                </div>
                 <div class="preview-pages" id="previewPages"></div>
             </section>
         </main>
@@ -148,12 +172,15 @@
         </footer>
     </div>
 
-    <!-- Библиотеки -->
-    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <!-- Библиотеки (локальные, работают без интернета) -->
+    <script src="js/vendor/pdf.min.js"></script>
+    <script src="js/vendor/html2canvas.min.js"></script>
+    <script src="js/vendor/jspdf.umd.min.js"></script>
 
-    <!-- Модули приложения -->
-    <script src="js/app.js" type="module"></script>
+    <!-- Скрипты приложения (загружаются в строгом порядке) -->
+    <script src="js/pdf-loader.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

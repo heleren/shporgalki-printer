@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shporgalki-v1';
+const CACHE_NAME = 'shporgalki-v11';
 const APP_SHELL = [
   './',
   './index.html',
@@ -7,24 +7,22 @@ const APP_SHELL = [
   './js/pdf-loader.js',
   './js/layout.js',
   './js/export.js',
+  './js/vendor/pdf.min.js',
+  './js/vendor/pdf.worker.min.js',
+  './js/vendor/html2canvas.min.js',
+  './js/vendor/jspdf.umd.min.js',
   './manifest.json',
   './assets/icons/icon.svg'
 ];
 
-const CDN_RESOURCES = [
-  'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js',
-  'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
-  'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js'
-];
-
-const ALL_RESOURCES = APP_SHELL.concat(CDN_RESOURCES);
+const ALL_RESOURCES = APP_SHELL;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ALL_RESOURCES);
-    }).catch(() => {
-      // CDN может быть недоступен при установке, это нормально
+    }).catch((err) => {
+      console.error('Ошибка кэширования:', err);
     })
   );
   self.skipWaiting();

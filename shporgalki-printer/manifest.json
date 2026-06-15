@@ -1,11 +1,11 @@
 {
-  "name": "Шпаргалки — печать билетов",
-  "short_name": "Шпаргалки",
+  "name": "Heleren PDF Printer",
+  "short_name": "Heleren",
   "description": "Упаковка учебных билетов на листы A4 для печати",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#1a73e8",
+  "background_color": "#0f172a",
+  "theme_color": "#10b981",
   "orientation": "any",
   "icons": [
     {
