@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a73e8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Шпаргалки">
+    <title>Шпаргалки — печать билетов</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/icons/icon.svg">
+    <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="header__title">Шпаргалки</div>
+            <div class="header__subtitle">Упаковка билетов на A4</div>
+        </header>
+
+        <main class="main">
+            <!-- Загрузка -->
+            <section class="section upload-section" id="uploadSection">
+                <div class="upload-zone" id="dropZone">
+                    <input type="file" id="pdfInput" accept=".pdf,application/pdf" hidden>
+                    <div class="upload-zone__icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                    </div>
+                    <div class="upload-zone__text">Нажмите или перетащите PDF</div>
+                    <div class="upload-zone__hint">Поддерживаются файлы .pdf</div>
+                </div>
+                <div class="file-info" id="fileInfo"></div>
+            </section>
+
+            <!-- Настройки -->
+            <section class="section settings-section" id="settingsSection">
+                <h2 class="section-title">Настройки</h2>
+
+                <div class="setting-group">
+                    <label class="setting-label">Режим обработки</label>
+                    <div class="segmented-control">
+                        <button class="segmented-control__btn active" data-mode="page" id="modePage">Страница = билет</button>
+                        <button class="segmented-control__btn" data-mode="text" id="modeText">Текст = билет</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label" for="ticketsPerPage">Билетов на лист</label>
+                    <select id="ticketsPerPage" class="setting-select">
+                        <option value="2">2 (1×2)</option>
+                        <option value="4" selected>4 (2×2)</option>
+                        <option value="6">6 (2×3)</option>
+                        <option value="8">8 (2×4)</option>
+                        <option value="9">9 (3×3)</option>
+                        <option value="12">12 (3×4)</option>
+                        <option value="16">16 (4×4)</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label" for="fontSize">Размер шрифта</label>
+                    <div class="range-row">
+                        <input type="range" id="fontSize" class="range-input" min="6" max="16" step="0.5" value="10">
+                        <span class="range-value" id="fontSizeValue">10pt</span>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label" for="orientation">Ориентация</label>
+                    <select id="orientation" class="setting-select">
+                        <option value="portrait" selected>Книжная</option>
+                        <option value="landscape">Альбомная</option>
+                    </select>
+                </div>
+
+                <details class="advanced">
+                    <summary class="advanced__summary">Расширенные настройки</summary>
+                    <div class="advanced__body">
+                        <div class="setting-group">
+                            <label class="setting-label" for="marginTop">Верхнее поле (мм)</label>
+                            <input type="number" id="marginTop" class="setting-input" value="10" min="0" max="50">
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-label" for="marginBottom">Нижнее поле (мм)</label>
+                            <input type="number" id="marginBottom" class="setting-input" value="10" min="0" max="50">
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-label" for="marginLeft">Левое поле (мм)</label>
+                            <input type="number" id="marginLeft" class="setting-input" value="10" min="0" max="50">
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-label" for="marginRight">Правое поле (мм)</label>
+                            <input type="number" id="marginRight" class="setting-input" value="10" min="0" max="50">
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-label" for="gapX">Промежуток между билетами (мм)</label>
+                            <input type="number" id="gapX" class="setting-input" value="5" min="0" max="20">
+                        </div>
+                        <div class="setting-group">
+                            <label class="setting-label" for="pageScale">Масштаб страницы</label>
+                            <div class="range-row">
+                                <input type="range" id="pageScale" class="range-input" min="0.5" max="3" step="0.1" value="1.5">
+                                <span class="range-value" id="pageScaleValue">1.5x</span>
+                            </div>
+                        </div>
+                        <div class="setting-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="showPageNumbers" checked>
+                                <span class="checkbox-text">Номера билетов</span>
+                            </label>
+                        </div>
+                        <div class="setting-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="cutMarks">
+                                <span class="checkbox-text">Метки для ножниц</span>
+                            </label>
+                        </div>
+                    </div>
+                </details>
+
+                <div class="actions">
+                    <button class="btn btn--primary" id="previewBtn">Предпросмотр</button>
+                    <button class="btn btn--secondary" id="printBtn">Печать</button>
+                    <button class="btn btn--secondary" id="downloadBtn">Скачать PDF</button>
+                </div>
+            </section>
+
+            <!-- Статус -->
+            <section class="section status-section" id="statusSection" hidden>
+                <div class="status" id="status"></div>
+            </section>
+
+            <!-- Предпросмотр -->
+            <section class="section preview-section" id="previewSection" hidden>
+                <h2 class="section-title">Предпросмотр</h2>
+                <div class="preview-pages" id="previewPages"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer__text">Работает офлайн • PWA</div>
+        </footer>
+    </div>
+
+    <!-- Библиотеки -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+    <!-- Модули приложения -->
+    <script src="js/app.js" type="module"></script>
+</body>
+</html>
